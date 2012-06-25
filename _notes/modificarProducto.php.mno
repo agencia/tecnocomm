@@ -1,0 +1,1 @@
+﻿<?xml version="1.0" encoding="utf-8" ?><info>	<infoitem key="UD_rsProducto" value="name:idarticulo;datatype:int,name:nombre;datatype:string,name:descripcion;datatype:string,name:codigo;datatype:string,name:marca;datatype:string,name:modelo;datatype:string,name:medida;datatype:string,name:moneda;datatype:int,name:precio;datatype:real,name:empaque;datatype:string" /></info>

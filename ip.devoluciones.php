@@ -1,0 +1,2 @@
+<h1>Devolucion De Material</h1>
+<p>Muestra una lista del material que ha sido devuelto al almacen, para registrar una nueva devolucion de click en Registrar Devolucion o bien Registrar Devolucion Con Escanner</p>

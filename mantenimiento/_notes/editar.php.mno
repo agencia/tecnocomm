@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_Actividad" value="name:idActividad;datatype:int,name:actividad;datatype:string,name:estado;datatype:int,name:inicio;datatype:datetime,name:ultimo;datatype:datetime" />
+	<infoitem key="UD_Estado" value="name:idEstado;datatype:int,name:estado;datatype:string" />
+</info>

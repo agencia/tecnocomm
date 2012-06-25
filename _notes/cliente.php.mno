@@ -1,0 +1,1 @@
+﻿<?xml version="1.0" encoding="utf-8" ?><info>	<infoitem key="UD_rsClientes" value="name:idcliente;datatype:int,name:nombre;datatype:string,name:abreviacion;datatype:string,name:direccion;datatype:string,name:ciudad;datatype:string,name:fraccionamiento;datatype:string,name:estado;datatype:string,name:cp;datatype:string" /></info>

@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>phatfusion : page loader</title>
+
+
+
+<link href="pageLoader.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="js/mootools2.js"></script>
+<script type="text/javascript" src="js/history.js"></script>
+<script type="text/javascript" src="js/pageLoader.js"></script>
+<style>
+#example{
+
+background:none
+}
+</style>
+
+
+</head>
+<body>
+
+	<div id="container">
+	
+		<div id="logo"><h1>phatfusion</h1></div>
+		<div class="nav"><a href="../index.htm">home</a></div>
+		<p class="desc">javascript and flash development.</p>
+		
+		
+		<h2 class="pageloader">image menu</h2>
+		<p class="version">version 1.0</p>
+		<p class="description">load a div from another page into a div on this page.</p>
+		
+		
+		<h3 class="example">example</h3>
+		<div id="example">
+			<p><a href="cliente.php" class="loadMe">load content A</a>  |  <a href="content2.htm" class="loadMe">load content B</a>  |  <a href="content3.htm" class="loadMe">load content C</a></p>
+		  <div id="ajaxContent"></div>
+		
+		<script type="text/javascript">
+			
+			window.addEvent('domready', function(){
+				new pageLoader({loadInTo:'ajaxContent'});
+				new History();
+			});
+		</script>
+		</div>
+		
+		<h3 class="features">features</h3>
+		<div id="features">
+			<ul>
+				<li>load a div from another page into a div on this page.</li>
+			</ul>
+		</div>
+		
+		<h3 class="usage">usage</h3>
+		<div id="usage">
+		<pre><code>new pageLoader({loadInTo:'ajaxContent'});</code></pre>
+		<pre><code>new History();</code></pre>
+		<p>History has one option: links, works in the same way as the page loader links option.</p>
+
+			<h3 class="options">options</h3>
+			<dl>
+				<dt>links</dt>
+				<dd>the class name of the links to use. (default: 'loadMe')</dd>
+				<dt>loadInTo</dt>
+				<dd>the div to load the content into. (default: 'content')</dd>
+				<dt>loadFrom</dt>
+				<dd>the div to load the content from. (default: 'content')</dd>
+				<dt>onStart</dt>
+				<dd>function to call on start.</dd>
+				<dt>onComplete</dt>
+				<dd>function to call on complete.</dd>
+			</dl>
+		</div>
+		
+		<h3 class="compatibility">browser compatibility</h3>
+		<div id="compatibility">
+			<ul>
+				<li>Firefox 2 (mac / pc)</li>
+				<li>IE 7</li>
+				<li>IE 6</li>
+				<li>Safari (mac)</li>
+			</ul>
+		</div>
+		
+		<h3 class="requirements">requirements</h3>
+		<div id="requirements">
+			<ul>
+				<li><a href="http://www.mootools.net" target="_blank">mootools v1.11</a></li>
+			</ul>
+		</div>
+		
+		<h3 class="downloads">downloads</h3>
+		<div id="downloads">
+			<ul>
+				<li><a href="pageloader.zip">pageloader.zip</a></li>
+				<li><a href="../utils/history.js" target="_blank">history.js</a></li>
+			</ul>
+		</div>
+		
+		
+	</div>
+
+</body>
+</html>

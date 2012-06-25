@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_Recordset1" value="name:estado;datatype:string,name:actividad;datatype:string,name:idActividad;datatype:int,name:inicio;datatype:datetime,name:ultimo;datatype:datetime" />
+</info>

@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_RsClientes" value="name:idcliente;datatype:int,name:nombre;datatype:string,name:abreviacion;datatype:string,name:direccion;datatype:string,name:ciudad;datatype:string,name:fraccionamiento;datatype:string,name:estado;datatype:string,name:cp;datatype:string,name:razonsocial;datatype:string,name:direccionfacturacion;datatype:string,name:ciudadfacturacion;datatype:string,name:rfc;datatype:string" />
+	<infoitem key="UD_RsCotiExt" value="name:idsubcotizacion;datatype:int,name:idcotizacion;datatype:int,name:identificador;datatype:int,name:identificador2;datatype:string,name:contacto;datatype:int,name:fecha;datatype:date,name:numero;datatype:int,name:formapago;datatype:int,name:moneda;datatype:int,name:nombre;datatype:string,name:tipo_cambio;datatype:real,name:vigencia;datatype:string,name:tipoentrega;datatype:string,name:garantia;datatype:string,name:notas;datatype:blob,name:facturada;datatype:int,name:utilidad_global;datatype:real,name:estado;datatype:int,name:usercreo;datatype:int" />
+</info>
