@@ -264,7 +264,7 @@ $queryString_RsArticulos = sprintf("&totalRows_RsArticulos=%d%s", $totalRows_RsA
         </a></td>
       </tr>
 </table>
-<input type="hidden" name="idordenservicio" value="<?php echo $_GET["idordenservicio"];?>"/>
+<input type="hidden" name="idordencompra" value="<?php echo $_GET["idordencompra"];?>"/>
 </form>
 </body>
 </html>

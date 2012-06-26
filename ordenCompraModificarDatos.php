@@ -38,7 +38,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
   $updateSQL = sprintf("UPDATE ordencompra SET vigencia=%s, formapago=%s, tiempoentrega=%s, notas=%s, descuento=%s, moneda=%s, tituloconcepto=%s WHERE idordencompra=%s",
                        GetSQLValueString($_POST['vigencia'], "text"),
                        GetSQLValueString($_POST['formapago'], "text"),
-					   GetSQLValueString($_POST['tiempoentrega'], "text"),
+                        GetSQLValueString($_POST['tiempoentrega'], "text"),
                        GetSQLValueString($_POST['notas'], "text"),
                        GetSQLValueString($_POST['descuento'], "text"),
 					   GetSQLValueString($_POST['moneda'], "int"),

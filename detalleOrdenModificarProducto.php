@@ -35,9 +35,11 @@ if (isset($_SERVER['QUERY_STRING'])) {
 }
 
 if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "asignar")) {
-  $updateSQL = sprintf("UPDATE detalleorden SET cantidad=%s,costo=%s WHERE identificador=%s",
+  $updateSQL = sprintf("UPDATE detalleorden SET cantidad=%s,costo=%s, descuento=%s, descri=%s WHERE identificador=%s",
                        GetSQLValueString($_POST['cantidad'], "double"),
 					   GetSQLValueString($_POST['precio'], "double"),
+					   GetSQLValueString($_POST['descuento'], "double"),
+					   GetSQLValueString($_POST['descri'], "text"),
                        GetSQLValueString($_POST['iddetalleorden'], "int"));
 
   mysql_select_db($database_tecnocomm, $tecnocomm);
@@ -56,7 +58,7 @@ if (isset($_GET['iddetalleorden'])) {
   $colname_rsDetalle = $_GET['iddetalleorden'];
 }
 mysql_select_db($database_tecnocomm, $tecnocomm);
-$query_rsDetalle = sprintf("SELECT a.nombre, don.cantidad, don.costo FROM detalleorden don,articulo a WHERE don.identificador = %s AND  don.idarticulo = a.idarticulo", GetSQLValueString($colname_rsDetalle, "int"));
+$query_rsDetalle = sprintf("SELECT don.descuento, don.descri, a.nombre, don.cantidad, don.costo FROM detalleorden don,articulo a WHERE don.identificador = %s AND  don.idarticulo = a.idarticulo", GetSQLValueString($colname_rsDetalle, "int"));
 $rsDetalle = mysql_query($query_rsDetalle, $tecnocomm) or die(mysql_error());
 $row_rsDetalle = mysql_fetch_assoc($rsDetalle);
 $totalRows_rsDetalle = mysql_num_rows($rsDetalle);
@@ -86,7 +88,7 @@ $totalRows_rsDetalle = mysql_num_rows($rsDetalle);
     <tr>
       <td height="22"></td>
       <td valign="top">DESCRIPCION:</td>
-      <td colspan="2" valign="top"><?php echo $row_rsDetalle['nombre']; ?></td>
+      <td colspan="2" valign="top"><textarea name="descri"><?php echo $row_rsDetalle['descri']; ?></textarea></td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
     </tr>
@@ -101,6 +103,13 @@ $totalRows_rsDetalle = mysql_num_rows($rsDetalle);
       <td height="25"></td>
       <td valign="top">PRECIO:</td>
       <td colspan="2" valign="top"><input name="precio" type="text" id="precio" value="<?php echo $row_rsDetalle['costo']; ?>" /></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td height="25"></td>
+      <td valign="top">DESCUENTO:</td>
+      <td colspan="2" valign="top"><input name="descuento" type="text" id="precio" value="<?php echo $row_rsDetalle['descuento']; ?>" />%</td>
       <td></td>
       <td></td>
     </tr>

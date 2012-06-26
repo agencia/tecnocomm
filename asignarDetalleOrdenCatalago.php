@@ -35,11 +35,13 @@ if (isset($_SERVER['QUERY_STRING'])) {
 }
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "asignar")) {
-  $insertSQL = sprintf("INSERT INTO detalleorden (cantidad, costo, idordencompra,idarticulo) VALUES (%s, %s, %s,%s)",
+  $insertSQL = sprintf("INSERT INTO detalleorden (cantidad, costo, idordencompra,idarticulo, descri, descuento) VALUES (%s, %s, %s,%s,%s,%s)",
                        GetSQLValueString($_POST['cantidad'], "double"),
 					   GetSQLValueString($_POST['precio'], "double"),
                        GetSQLValueString($_POST['idordencompra'], "int"),
-					   GetSQLValueString($_POST['idarticulo'], "int")
+					   GetSQLValueString($_POST['idarticulo'], "int"),
+					   GetSQLValueString($_POST['descri'], "text"),
+					   GetSQLValueString($_POST['descuento'], "double")
 					   );
 
   mysql_select_db($database_tecnocomm, $tecnocomm);
@@ -88,7 +90,7 @@ $totalRows_rsPartidas = mysql_num_rows($rsPartidas);
   <tr>
     <td height="22"></td>
     <td valign="top">DESCRIPCION:</td>
-    <td colspan="2" valign="top"><?php echo $row_rsPartidas['nombre']; ?></td>
+    <td colspan="2" valign="top"><textarea name="descri"><?php echo $row_rsPartidas['nombre']; ?></textarea></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
@@ -105,6 +107,13 @@ $totalRows_rsPartidas = mysql_num_rows($rsPartidas);
     <td height="25"></td>
     <td valign="top">PRECIO:</td>
     <td colspan="2" valign="top"><input name="precio" type="text" id="precio" value="<?php echo $row_rsPartidas['precio']; ?>" /></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td height="25"></td>
+    <td valign="top">DESCUENTO:</td>
+    <td colspan="2" valign="top"><input name="descuento" type="text" id="descuento" value="0" /></td>
     <td></td>
     <td></td>
   </tr>

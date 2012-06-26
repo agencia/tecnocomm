@@ -49,6 +49,11 @@ $query_rsDetalle = sprintf("SELECT * FROM articulo a,detalleorden o WHERE a.idar
 $rsDetalle = mysql_query($query_rsDetalle, $tecnocomm) or die(mysql_error());
 $row_rsDetalle = mysql_fetch_assoc($rsDetalle);
 $totalRows_rsDetalle = mysql_num_rows($rsDetalle);
+
+
+$tip=array(0=>"PL",1=>"C");
+
+$signo = array(0=>"$",1=>"US$");
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -164,7 +169,7 @@ $totalRows_rsDetalle = mysql_num_rows($rsDetalle);
           <td width="237">&nbsp;</td>
           <td width="132" valign="top"><a href="printOrdenCompraGeneral.php?idordencompra=<?php echo $row_rsOrdenCompra['idordencompra']; ?>" ><img src="images/Imprimir2.png" width="24" height="24" />IMPRIIR</a></td>
           <td width="63">&nbsp;</td>
-          <td colspan="2" valign="top"><a href="ordenCompraModificarDatos.php?idordencompra=<?php echo $row_rsOrdenCompra['idordencompra']; ?>" onclick="NewWindow(this.href,'Modificar Datos de Orden de Compra',800,800,'yes');return false;"><img src="images/Edit.png" alt="" width="24" height="24" title="Modifca los Datos de Generales de La orden de compra" />Modificar Datos</a></td>
+          <td colspan="2" valign="top"><a href="ordenCompraModificarDatos.php?idordencompra=<?php echo $row_rsOrdenCompra['idordencompra']; ?>" onclick="NewWindow(this.href,'Modificar Datos de Orden de Compra',600,400,'yes');return false;"><img src="images/Edit.png" alt="" width="24" height="24" title="Modifca los Datos de Generales de La orden de compra" />Modificar Datos</a></td>
       </tr>
       <tr>
         <td height="13"></td>
@@ -181,7 +186,7 @@ $totalRows_rsDetalle = mysql_num_rows($rsDetalle);
   <tr>
     <td height="28"></td>
     <td>&nbsp;</td>
-    <td valign="top"><a href="compra_nueva_buscar_articulo.php?idordencompra=<?php echo $_GET['idordencompra']; ?>" onclick="NewWindow(this.href,'Agregar de Cotizacion',1150,800,'yes');return false;">AGREGAR DE CATALAGO</a></td>
+    <td valign="top"><a href="compra_nueva_buscar_articulo.php?idordencompra=<?php echo $_GET['idordencompra']; ?>" onclick="NewWindow(this.href,'Agregar de Cotizacion',1150,600,'yes');return false;">AGREGAR DE CATALAGO</a></td>
     <td valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
       <!--DWLayoutTable-->
       <tr>
@@ -194,24 +199,28 @@ $totalRows_rsDetalle = mysql_num_rows($rsDetalle);
   
   <tr>
     <td height="65"></td>
-    <td colspan="3" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <td colspan="3" valign="top">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
       <!--DWLayoutTable-->
       <tr>
-        <td width="765" height="21" valign="top" class="realte">PRODUCTOS DE ORDEN DE COMPRA:</td>
+        <td width="800" height="21" valign="top" class="realte">PRODUCTOS DE ORDEN DE COMPRA:</td>
         </tr>
       <tr>
-        <td height="20" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <td height="20" valign="top">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
           <!--DWLayoutTable-->
           <tr class="titleTabla">
-            <td width="58" height="20" valign="top">PARTIDA</td>
+            <td width="50" height="20" valign="top">PART</td>
                 <td width="78" valign="top">CODIGO</td>
                 <td width="72" valign="top">MARCA</td>
-                <td width="264" valign="top">DESCRIPCION</td>
+                <td width="240" valign="top">DESCRIPCION</td>
                 <td width="42" valign="top">CANT.</td>
                 <td width="44" valign="top">U.MED</td>
-                <td width="74" valign="top">P. UNITARIO</td>
+                <td width="70" valign="top">P. UNIT</td>
+                <td width="74" valign="top">P. C/DESC</td>
                 <td width="59" valign="top">IMPORTE</td>
-                <td width="74" valign="top">OPCIONES</td>
+                <td width="40" valign="top">OPC</td>
+                <td width="40" valign="top">INFO</td>
               </tr>
           </table>        </td>
         </tr>
@@ -224,12 +233,14 @@ $totalRows_rsDetalle = mysql_num_rows($rsDetalle);
               <td width="59" height="21" align="center" valign="top"><?php  echo ++$i;?></td>
               <td width="74" align="center" valign="top"><?php echo $row_rsDetalle['codigo']; ?></td>
               <td width="75" align="center" valign="top"><?php echo $row_rsDetalle['marca']; ?></td>
-              <td width="263" valign="top"><?php echo $row_rsDetalle['nombre']; ?></td>
+              <td width="280" valign="top"><?php echo $row_rsDetalle['descri']; ?></td>
               <td width="41" align="center" valign="top"><?php echo $row_rsDetalle['cantidad']; ?></td>
               <td width="45" align="center" valign="top"><?php echo $row_rsDetalle['medida']; ?></td>
               <td width="73" align="right" valign="top"><?php echo $row_rsDetalle['costo']; ?></td>
-              <td width="62" align="right" valign="top"><?php echo format_money($row_rsDetalle['cantidad'] * $row_rsDetalle['costo']);?></td>
-              <td width="73" align="right" valign="top"><a href="detalleOrdenEliminar.php?iddetalleorden=<?php echo $row_rsDetalle['identificador']; ?>" onclick="NewWindow(this.href,'Quitar Producto de Orden',800,800,'yes'); return false;" ><img src="images/eliminar.gif" width="19" height="19" /></a><a href="detalleOrdenModificarProducto.php?iddetalleorden=<?php echo $row_rsDetalle['identificador']; ?>" onclick="NewWindow(this.href,'Modificar Producto Orden',800,800,'yes'); return false;" ><img src="images/Edit.png" width="24" height="24" /></a></td>
+              <td width="73" align="right" valign="top"><?php echo round($row_rsDetalle['costo']-(($row_rsDetalle['descuento']/100)*$row_rsDetalle['costo']),2); ?></td>
+              <td width="62" align="right" valign="top"><?php echo format_money($row_rsDetalle['cantidad'] * round(($row_rsDetalle['costo']-(($row_rsDetalle['descuento']/100)*$row_rsDetalle['costo'])),2));?></td>
+              <td width="73" align="right" valign="top"><a href="detalleOrdenEliminar.php?iddetalleorden=<?php echo $row_rsDetalle['identificador']; ?>" onclick="NewWindow(this.href,'Quitar Producto de Orden',800,600,'yes'); return false;" ><img src="images/eliminar.gif" width="19" height="19" /></a><a href="detalleOrdenModificarProducto.php?iddetalleorden=<?php echo $row_rsDetalle['identificador']; ?>" onclick="NewWindow(this.href,'Modificar Producto Orden',800,400,'yes'); return false;" ><img src="images/Edit.png" width="24" height="24" /></a></td>
+              <td width="40" align="right" valign="top"><?php echo $signo[$row_rsDetalle['moneda']]; ?>&nbsp;&nbsp;<?php echo $tip[$row_rsDetalle['tipo']]; ?></td>
             </tr>
             <?php } while ($row_rsDetalle = mysql_fetch_assoc($rsDetalle)); ?>
           </table>        </td>
