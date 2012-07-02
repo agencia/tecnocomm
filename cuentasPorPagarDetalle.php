@@ -885,18 +885,20 @@ $signo = array(0=>"$",1=>"US$");
 					else
 					$totaldolares = $totaldolares + $row_rsCuentas['monto'];
 				}
-				
+				$saldofinal += $row_rsCuentas['monto']-$row_rsCuentas['abonado'];
 				?>
         <?php } while ($row_rsCuentas = mysql_fetch_assoc($rsCuentas)); ?>
       
       <tr>
         <td height="13"></td>
           <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+    <td align="right" valign="top">&nbsp;</td>
+    <td align="right" valign="top">&nbsp;</td>
+    <td valign="top">&nbsp;$</td>
+    <td align="right"><b><?php echo format_money($totalpesos);?></b></td>
+    <td valign="top">&nbsp;$</td>
+    <td align="right"><b><?php echo format_money($saldofinal);?></b></td>
+    <td valign="top" align="right">&nbsp;</td>
         </tr>
       
       
@@ -908,7 +910,7 @@ $signo = array(0=>"$",1=>"US$");
     </table></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-  </tr>
+<!--  </tr>
   <tr>
     <td height="27"></td>
     <td></td>
@@ -930,7 +932,7 @@ $signo = array(0=>"$",1=>"US$");
     <td colspan="3" valign="top" align="right"><?php echo format_money($totaldolares);?></td>
     <td></td>
     <td></td>
-  </tr>
+  </tr>-->
  
   
   <tr>

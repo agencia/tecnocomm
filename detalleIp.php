@@ -56,6 +56,16 @@ $query_rsCotiIp3 = sprintf("SELECT * from ordenservicio WHERE idip=%s", $ide_rsC
 $rsCotiIp3 = mysql_query($query_rsCotiIp3, $tecnocomm) or die(mysql_error());
 $totalRows_rsCotiIp3 = mysql_num_rows($rsCotiIp3);
 
+mysql_select_db($database_tecnocomm, $tecnocomm);
+$query_rsCotiIp4 = sprintf("SELECT * from factura WHERE idip=%s", $ide_rsCotiIp2);
+$rsCotiIp4 = mysql_query($query_rsCotiIp4, $tecnocomm) or die(mysql_error());
+$totalRows_rsCotiIp4 = mysql_num_rows($rsCotiIp4);
+
+mysql_select_db($database_tecnocomm, $tecnocomm);
+$query_rsCotiIp5 = sprintf("SELECT o.* from ordencompra o, subcotizacion s, cotizacion c WHERE c.idip=%s and o.idcotizacion = s.idsubcotizacion AND s.idcotizacion = c.idcotizacion", $ide_rsCotiIp2);
+$rsCotiIp5 = mysql_query($query_rsCotiIp5, $tecnocomm) or die(mysql_error());
+$totalRows_rsCotiIp5 = mysql_num_rows($rsCotiIp5);
+
 
 ?>
 <script type="text/javascript">
@@ -83,18 +93,18 @@ $(function(){
 <div id="tabs">
 	<ul>
     	<li><a href="#caler">Alertas</a></li>
-		<li><a href="#tabs-1">Ord. Servicio (<?php echo $totalRows_rsCotiIp3; ?>)</a></li>
-		<li><a href="#tabs-2">Levantamiento</a></li>
-		<li><a href="#tabs-3">Cotizacion (<?php echo $totalRows_rsCotiIp2 ?>)</a></li>
-         <li><a href="#tabs-12">Ord. Compra</a></li>
-         <li><a href="#tabs-4">Materiales</a></li>
-         <li><a href="#tabs-11">Herramienta</a></li>
          <li><a href="#tabs-7">Avance</a></li>
-         <li><a href="#tabs-8">Supervicion</a></li>
-         <li><a href="#tabs-9">Conciliacion</a></li>
-         <li><a href="#tabs-10">Facturas (<?php echo $totalRows_rsFacturas;?>) </a></li>
          <li><a href="#tabs-b">Bitacora</a></li>
+         <li><a href="#tabs-9">Conciliacion</a></li>
+	<li><a href="#tabs-3">Cotizacion (<?php echo $totalRows_rsCotiIp2 ?>)</a></li>
+         <li><a href="#tabs-10">Facturas (<?php echo $totalRows_rsCotiIp4; ?>) </a></li>
+         <li><a href="#tabs-11">Herramienta</a></li>
          <li><a href="#historialasignaciones">Historial Asignaciones</a></li>
+	<li><a href="#tabs-2">Levantamiento</a></li>
+         <li><a href="#tabs-4">Materiales</a></li>
+         <li><a href="#tabs-12">Ord. Compra (<?php echo $totalRows_rsCotiIp5; ?>)</a></li>
+        <li><a href="#tabs-1">Ord. Servicio (<?php echo $totalRows_rsCotiIp3; ?>)</a></li>
+         <li><a href="#tabs-8">Supervicion</a></li>
 	</ul>
     <div id="caler">
     <?php include("ip.conversacion.php");?>

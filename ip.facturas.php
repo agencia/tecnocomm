@@ -66,7 +66,10 @@ $estado =array ("<img src=\"images/Facturacion.png\"  title=\"Activa\"/>","<img 
         <?php do { ?>
           <tr>
             <td><?php echo $estado[$row_rsFactIp['estado']];?></td>
-            <td><a href="printFacturaPDF.php?idfactura=<?php echo $row_rsFactIp['idfactura']; ?>" target="_blank"><img src="images/Imprimir2.png" width="24" height="24"  title="Imprimir Factura"/>
+            <td><?php if($row_rsFactIp["estado"] ==1) { ?>
+                    <a href="verPago.php?idfactura=<?php echo $row_rsFactIp['idfactura']; ?>" class="popup"><img src="images/facturapagada.png" title="Pagada"></a>
+                <?php } ?>
+                <a href="printFacturaPDF.php?idfactura=<?php echo $row_rsFactIp['idfactura']; ?>" target="_blank"><img src="images/Imprimir2.png" width="24" height="24"  title="Imprimir Factura"/>
               </a>
             <a href="facturando.php?idfactura=<?php echo $row_rsFactIp['idfactura']; ?>" class="popup"><img src="images/Edit.png" width="24" height="24" /></a><a href="eliminarFactura.php?idfactura=<?php echo $row_rsFactIp['idfactura']; ?>" onclick="NewWindow(this.href,'eliminar factura','850','600','YES');return false"><img src="images/eliminar.gif" alt="eliminar" width="19" height="19" border="0" title="ELIMINAR FACTURA" /></a></td>
             

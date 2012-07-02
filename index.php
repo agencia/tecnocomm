@@ -143,7 +143,7 @@ do{
 <link href="style.css" rel="stylesheet" type="text/css">
 <link href="menu.css" rel="stylesheet" type="text/css">
 <link type="text/css" rel="stylesheet" href="dhtmlgoodies_calendar.css" media="screen" />
-<script src="js/jquery.js" language="javascript"></script>
+<script src="js/jquery.min.js" language="javascript"></script>
 <script src="js/jqueryui.js" language="javascript"></script>
 <script src="js/jquery.cookie.js" language="javascript"></script>
 <script src="js/jfastmenu.js" language="javascript"></script>
@@ -155,12 +155,25 @@ function alertas(){
 			$(document).ready(function(){
 				$.jFastMenu("#menu");
 				checkAlerts();
+                                
+                            $("#iradtalle").submit(function(e){
+                                if(!$.isNumeric($("#iradtalle_ip").val()) && $("#iradtalle_ip").attr("name") != "bus"){
+                                    e.preventDefault();
+                                    $("#iradtalle_mod").val("ip");
+                                    $("#iradtalle_ip").attr("name", "bus");
+                                    $("#iradtalle").append('<input type="hidden" name="estado" value="-1" />');
+                                    $("#iradtalle").append('<input type="hidden" name="usuario" value="-1" />');
+                                    $("#iradtalle").append('<input type="hidden" name="filtro" value="1" />');
+                                    $("#iradtalle").submit();
+                                }
+                            });
 			});
 
 			function checkAlerts() {
 				alertas();
 				setTimeout(checkAlerts, 10000);
 			};
+                        
 			
 </script>
 <link href="style2.css" rel="stylesheet" type="text/css" />
@@ -308,7 +321,10 @@ function alertas(){
     <ul>
     <li><a href="nuevoIP.php" onClick="NewWindow(this.href,'Nuevo IP','800','600','yes'); return false;"> <img src="images/light_bulb__plus.png" width="16" height="16">Nuevo </a></li>
     <li><a href="index.php?mod=ip"><img src="images/light_bulb_off.png" width="16" height="16">Consultar</a></li>
-     <li><form name="iradtalle" method="get" style="display:inline"> Ir <input type="text" name="idip" size="8" style="display:inline"><input type="hidden" name="mod" value="detalleip"></form></li>
+    <li><form name="iradtalle" id="iradtalle" method="get" style="display:inline"> Ir 
+            <input type="text" name="idip" id="iradtalle_ip" size="8" style="display:inline">
+            <input type="hidden" name="mod" id="iradtalle_mod" value="detalleip">
+        </form></li>
     </ul>
     
     </li>

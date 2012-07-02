@@ -134,41 +134,104 @@ $rsArticulo = mysql_query($query_rsArticulo, $tecnocomm) or die(mysql_error());
 $row_rsArticulo = mysql_fetch_assoc($rsArticulo);
 $totalRows_rsArticulo = mysql_num_rows($rsArticulo);
 
-
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Nuevo Banco</title>
-<link href="style2.css" rel="stylesheet" type="text/css" />
 <script src="js/jquery.js"></script>
 <script src="js/valid.js"></script>
+
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script language="javascript">
+
+function confirmar(elementName,elementValueOld,elementValueNew){
+
+if(!confirm("Usted A Elegido Hacer El Siguiente Cambio, \nConfirme Por Favor, \n Valor Orginial: "+elementValueOld+" \nValor Nuevo: "+elementValueNew)){
+	
+	document.getElementById(elementName).value =  elementValueOld;
+
+}else{
+	document.getElementById(elementName).value =  elementValueNew;
+
+}
+
+
+}
+</script>
+<style type="text/css">
+<!--
+.Estilo1 {color: #FF0000}
+-->
+</style>
 </head>
 
-<body>
-<h1>Agregar Porducto o Servicio </h1>
-<p></p>
-
-<div id="myform">
+<body class="wrapper">
 
 <form action="<?php echo $editFormAction; ?>" name="nuevoProd" method="POST">
+    <table width="500" border="0" align="center" >
+  <tr>
+    <td width="27">&nbsp;</td>
+    <td colspan="2" align="center" background="images/titulo.gif" class="titulos">DATOS ARTICULO</td>
+    <td width="30">&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td align="right">DESCRIPCION:</td>
+    <td><label>
+    <textarea name="descripcion" cols="55" rows="5" class="form" id="nombre" onchange="confirmar('descripcion','<?php echo $row_rsArticulo['nombre']; ?>',this.form.descripcion.value);"><?php echo htmlentities($row_rsArticulo['nombre']); ?></textarea>
+    </label></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td align="right">PRECIO:</td>
+    <td><input name="precio" type="text" class="form" id="precio" value="<?php echo round($row_rsArticulo['precio'],2); ?>" onchange="confirmar('precio','<?php echo money_format('%i',$row_rsArticulo['precio']); ?>',this.form.precio.value);"/><?php if($row_rsArticulo['moneda']==0){ echo "M.N.";}if($row_rsArticulo['moneda']==1){ echo "USD";} ?>&nbsp;&nbsp;<?php if($row_rsArticulo['tipo']==0){ echo "PL";}if($row_rsArticulo['tipo']==1){ echo "CO";} ?></td>
+    <td>&nbsp;</td> 
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td align="right">MANO DE OBRA: </td>
+    <td><input name="mo" type="text" class="form" id="mo" value="<?php echo $row_rsArticulo['instalacion']; ?>" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td align="right">CANTIDAD:</td>
+    <td><input name="cantidad" type="text" class="form" id="cantidad" value="1" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td align="right">FACTOR UTILIDAD:</td>
+    <td align="left"><input name="utilidad" type="text" class="form" id="utilidad" value="<?php echo $row_RsOrden['utilidad'];?> " /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td align="right"><label>
+      <input type="submit" name="button" id="button" value="Aceptar" />
+    </label></td>
+    <td>&nbsp;</td>
+  </tr>
+    </table>
 <div>
-<h3>Datos Generales</h3>
+<!--<h3>Datos Generales</h3>
 <label>Descripcion:
 <input name="descripcion" type="text" class="requerido" value="<?php echo $row_rsArticulo['nombre']; ?>"  />
-</label>
-<label>Marca:
-<input name="marca" type="text" value="<?php echo $row_rsArticulo['marca']; ?>"  />
+</label>-->
+<!--<label>Marca:
+--><input name="marca" type="hidden" value="<?php echo $row_rsArticulo['marca']; ?>"  /><!--
 </label>
 <label>Codigo:
-  <input name="codigo" type="text" value="<?php echo $row_rsArticulo['codigo']; ?>"  />
-</label>
-<label>Cantidad:
+-->  <input name="codigo" type="hidden" value="<?php echo $row_rsArticulo['codigo']; ?>"  /><!--
+</label>-->
+<!--<label>Cantidad:
 <input name="cantidad" type="text" value="1" />
 </label>
 
 </div>
-<?php if(permiso($_SESSION['MM_UserGroup'],27)){ ?>
 <div>
 <h3>Adicionales</h3>
 
@@ -187,10 +250,9 @@ $totalRows_rsArticulo = mysql_num_rows($rsArticulo);
 </label>
 
 </div>
-<? }?>
 <div class="botones">
 <input type="submit" value="Aceptar" />
-</div>
+</div>-->
 <input type="hidden" name="moneda" value="<?php echo $row_rsArticulo['moneda']; ?>"/>
 <input type="hidden" name="idarticulo" value="<?php echo $_GET['idarticulo']; ?>"/>
 <input type="hidden" name="idordenservicio" value="<?php echo $_GET['idordenservicio']; ?>"/>
@@ -199,7 +261,6 @@ $totalRows_rsArticulo = mysql_num_rows($rsArticulo);
 
 </form>
 
-</div>
 
 </body>
 </html>

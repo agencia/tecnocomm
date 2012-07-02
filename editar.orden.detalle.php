@@ -211,10 +211,22 @@ $money = array(0=>"Pesos",1=>"Dolares");
     <td><span class="sip"><?php echo $_GET['idip'];?></span></td>
   </tr>
   <tr>
+    <td align="right" bgcolor="#CCCCCC">Orden no.:</td>
+    <td><?php echo $row_rsOrden['numeroorden']; ?></td>
+    <td align="right" bgcolor="#CCCCCC">Contacto:</td>
+    <td><?php echo $row_rsContacto['nombre']; ?></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#CCCCCC">Utilidad Global:</td>
+    <td><span class="sip"><?php echo $row_rsOrden['utilidad']?></span></td>
+    <td align="right" bgcolor="#CCCCCC">Email:</td>
+    <td><?php echo $row_rsContacto['correo']; ?></td>
+  </tr>
+  <tr>
     <td align="right" bgcolor="#CCCCCC">Fecha:</td>
     <td><?php echo formatDate($row_rsOrden['fecha']); ?></td>
-    <td align="right" bgcolor="#CCCCCC">Utilidad Grlobal:</td>
-    <td><span class="sip"><?php echo $row_rsOrden['utilidad']?></span></td>
+    <td align="right" bgcolor="#CCCCCC">Tel:</td>
+    <td><?php echo $row_rsContacto['telefono']; ?></td>
   </tr>
   <tr>
     <td align="right" bgcolor="#CCCCCC">Tipo de cambio:</td>
@@ -225,10 +237,10 @@ $money = array(0=>"Pesos",1=>"Dolares");
       <a href="orden.cargar.precios.php?idordenservicio=<?php echo $_GET['idordenservicio'];?>" onclick="NewWindow(this.href,'Buscar articulo','500','500','yes');return false"><img src="images/Agregar.png" width="24" height="24" border="0" align="absmiddle" title="Cargar Precios" /></a><?php } ?></td>
   </tr>
   <tr>
-    <td  align="right" bgcolor="#CCCCCC">Moneda:</td>
-    <td colspan="3" ><?php echo $money[$row_rsOrden['moneda']]; ?></td>
-    </tr>
-  <tr>
+      <td align="right" bgcolor="#CCCCCC">Moneda:</td>
+    <td colspan="3"><?php echo $money[$row_rsOrden['moneda']]; ?></td>
+  </tr>
+  </tr>
     <td  align="right" bgcolor="#CCCCCC">Descripcion:</td>
     <td colspan="3" valign="top" ><?php echo $row_rsOrden['descripcionreporte']; ?></td>
     </tr>
