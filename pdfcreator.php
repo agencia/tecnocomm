@@ -52,7 +52,7 @@ var $signo = '$';
 			$this->setXY(95,42.5);
 			$this->Write(5,$email);
 			
-			$this->setXY(168,32);
+			$this->setXY(155,33.5);
 			$this->Write(5,$cotizacion);
 			
 			$this->setXY(163,41);
@@ -309,7 +309,7 @@ var $signo = '$';
 		
 		function setCot($title){
 			$this->setFont("Arial","IB","5");
-			$this->setXY(153.5,32);
+			$this->setXY(153.5,30);
 			$this->Write(5,$title);
 		}
 		

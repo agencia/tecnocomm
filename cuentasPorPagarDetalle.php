@@ -79,7 +79,7 @@ $currentPage = $_SERVER["PHP_SELF"];
 
 //95d835abdde8760ef40a110639a196c3:znTUkIbN1H2VpsVmzQMMnXZStYUWbo5B
 
-$query = sprintf("SELECT cp.*, (SELECT SUM(a.monto) FROM cuentasporpagar_abonos a WHERE a.idcuenta = cp.idcuenta ) as abonado FROM cuentasporpagar cp WHERE cp.idproveedor = %s ", GetSQLValueString($_GET['idproveedor'], "int"));
+$query = sprintf("SELECT cp.*, oc.identificador, (SELECT SUM(a.monto) FROM cuentasporpagar_abonos a WHERE a.idcuenta = cp.idcuenta ) as abonado FROM cuentasporpagar cp LEFT JOIN ordencompra oc ON cp.idordencompra = oc.idordencompra WHERE cp.idproveedor = %s ", GetSQLValueString($_GET['idproveedor'], "int"));
 
 if(isset($_GET['filtrar'])){
 
@@ -862,7 +862,13 @@ $signo = array(0=>"$",1=>"US$");
       <?php do { ?>
         <tr>
           <td height="20" valign="top"><?php echo $estados[$row_rsCuentas['estado']];?></td>
-          <td valign="top"><?php echo $concepto[$row_rsCuentas['tipo']]; ?><?php echo $row_rsCuentas['nofactura']; ?></td>
+          <td valign="top"><?php echo $concepto[$row_rsCuentas['tipo']]; ?><?php echo $row_rsCuentas['nofactura']; ?>
+          <?php if($row_rsCuentas["idordencompra"] > 0) { ?><br />OC: 
+              <a href="detalleOrden2.php?idordencompra=<?php echo $row_rsCuentas['idordencompra']; ?>" class="popup">
+                  <?php echo $row_rsCuentas["identificador"]; ?>
+              </a>
+              <?php } ?>
+          </td>
           <td align="center" valign="top"><?php echo formatDate($row_rsCuentas['fecha']); ?></td>
           <td align="center" valign="top"><?php echo formatDate($row_rsCuentas['fechavencimiento']); ?></td>
           <td valign="top"><?php echo  $signo[$row_rsCuentas['moneda']];?></td>

@@ -39,15 +39,27 @@ if (isset($_SERVER['QUERY_STRING'])) {
 }
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
-  $insertSQL = sprintf("INSERT INTO cuentasporpagar (idproveedor, monto, tipo, nofactura, fecha, fechavencimiento, estado,moneda) VALUES (%s, %s, %s, %s,%s,%s, 0,%s)",
+    
+    //MM_insert2
+    if($_POST["MM_insert2"] == "idordencompra"){
+        mysql_select_db($database_tecnocomm, $tecnocomm);
+        $query_rsOrden2 = sprintf("SELECT * FROM ordencompra WHERE idordencompra = %s ", $_POST['idordencompra']);
+        $rsOrden2 = mysql_query($query_rsOrden2, $tecnocomm) or die(mysql_error());
+        $row_rsOrden2 = mysql_fetch_assoc($rsOrden2);
+        $totalRows_rsOrden2 = mysql_num_rows($rsOrden2);
+        $idproveedor = $row_rsOrden2["idproveedor"];
+    } else
+        $idproveedor = $_POST['idproveedor'];
+  $insertSQL = sprintf("INSERT INTO cuentasporpagar (idproveedor, monto, tipo, nofactura, fecha, fechavencimiento, estado, moneda, idordencompra) VALUES (%s, %s, %s, %s,%s,%s, 0,%s, %s)",
              
-                       GetSQLValueString($_POST['idproveedor'], "int"),
+                       GetSQLValueString($idproveedor, "int"),
                        GetSQLValueString($_POST['monto'], "double"),
                        GetSQLValueString($_POST['tipo'], "int"),
 					   GetSQLValueString($_POST['nofactura'], "text"),
 					     GetSQLValueString($_POST['fecha'], "date"),
                        GetSQLValueString($_POST['fechavencimiento'], "date"),
-					    GetSQLValueString($_POST['moneda'], "date"));
+					    GetSQLValueString($_POST['moneda'], "date"),
+					    GetSQLValueString($_POST['idordencompra'], "int"));
 
   mysql_select_db($database_tecnocomm, $tecnocomm);
   $Result1 = mysql_query($insertSQL, $tecnocomm) or die(mysql_error());
@@ -65,21 +77,53 @@ $query_rsProveedor = "SELECT * FROM proveedor ORDER BY nombrecomercial ASC";
 $rsProveedor = mysql_query($query_rsProveedor, $tecnocomm) or die(mysql_error());
 $row_rsProveedor = mysql_fetch_assoc($rsProveedor);
 $totalRows_rsProveedor = mysql_num_rows($rsProveedor);
+
+mysql_select_db($database_tecnocomm, $tecnocomm);
+$query_rsOrden = "SELECT * FROM ordencompra ORDER BY idordencompra DESC";
+$rsOrden = mysql_query($query_rsOrden, $tecnocomm) or die(mysql_error());
+$row_rsOrden = mysql_fetch_assoc($rsOrden);
+$totalRows_rsOrden = mysql_num_rows($rsOrden);
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Untitled Document</title>
 <link href="style.css" rel="stylesheet" type="text/css" />
+<script language="javascript">
+function change(name,size,lab){
+s = document.getElementById(name);
+obj = document.createElement('input')
+obj.type = 'text'
+obj.id = name;
+obj.name = name;
+obj.size = size;
+document.getElementById(lab).replaceChild(obj,s)
+}
+
+function activar(obj,val) {
+    //dis = obj.selectedIndex==0 ? false : true;
+    dis = (val) ? "visible": "hidden";
+    document.getElementById(obj).style.visibility = dis;
+    document.getElementById("MM_insert2").value = obj;
+    
+} 
+</script>
+
 </head>
 
-<body>
+    <body onload="activar('idproveedor',true);activar('idordencompra',false);">
 <form action="<?php echo $editFormAction; ?>" method="post" name="form1" id="form1">
   <table align="center" class="wrapper">
 
     <tr valign="baseline">
+        <td colspan="2" nowrap="nowrap">
+            <label onclick="activar('idproveedor',true);activar('idordencompra',false);"><input type="radio" checked="checked" name="tipo" id="cxp_a" />Abierta</label>
+            <label onclick="activar('idproveedor',false);activar('idordencompra',true);"><input type="radio" name="tipo" id="cxp_o" />Orden de compra</label></td>
+    </tr>
+    <tr valign="baseline" id="idproveedor">
       <td nowrap="nowrap" align="right">Proveedor:</td>
       <td><select name="idproveedor">
+              <option value="0">Elija un proveedor</option>
           <?php
 do {  
 ?><option value="<?php echo $row_rsProveedor['idproveedor']?>"><?php echo $row_rsProveedor['nombrecomercial']?></option>
@@ -90,6 +134,19 @@ do {
       mysql_data_seek($rsProveedor, 0);
 	  $row_rsProveedor = mysql_fetch_assoc($rsProveedor);
   }
+?>
+      </select>
+      </td>
+    </tr>
+    <tr valign="baseline" id="idordencompra">
+      <td nowrap="nowrap" align="right">Orden de Compra:</td>
+      <td><select name="idordencompra">
+              <option value="0">Elija Orden de Compra</option>
+          <?php
+do {  
+?><option value="<?php echo $row_rsOrden['idordencompra']?>"><?php echo $row_rsOrden['identificador']?></option>
+          <?php
+} while ($row_rsOrden = mysql_fetch_assoc($rsOrden));
 ?>
       </select>
       </td>
@@ -249,6 +306,8 @@ do {
         <option value="2015" <?php if (!(strcmp(2015, date("Y")))) {echo "selected=\"selected\"";} ?>> 2015 </option>
         <option value="2016" <?php if (!(strcmp(2016, date("Y")))) {echo "selected=\"selected\"";} ?>> 2016 </option>
         <option value="2017" <?php if (!(strcmp(2017, date("Y")))) {echo "selected=\"selected\"";} ?>> 2017 </option>
+        <option value="2017" <?php if (!(strcmp(2018, date("Y")))) {echo "selected=\"selected\"";} ?>> 2018 </option>
+        <option value="2017" <?php if (!(strcmp(2019, date("Y")))) {echo "selected=\"selected\"";} ?>> 2019 </option>
       </select>
       </label><input type="button" value="Cal" onclick="displayCalendarSelectBox(document.forms[0].ano,document.forms[0].mes,document.forms[0].dia,false,false,this)"></td>
     </tr>
@@ -258,6 +317,7 @@ do {
     </tr>
   </table>
   <input type="hidden" name="MM_insert" value="form1" />
+  <input type="hidden" name="MM_insert2" id="MM_insert2" value="idproveedor" />
 </form>
 <p>&nbsp;</p>
 </body>

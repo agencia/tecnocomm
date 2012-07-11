@@ -98,7 +98,7 @@ $totalRows_rsCoti2 = mysql_num_rows($rsCoti2);
 
 	
 	
-  $insertSQL = sprintf("INSERT INTO subcotizacion (idcotizacion, identificador,identificador2, fecha, formapago, moneda, vigencia, tipoentrega, garantia,estado, nombre,contacto,tipo_cambio,notas,usercreo,utilidad_global,tipo,descrimano,monto,descuento, cantidad, unidad, codigo, marca,montoreal,cantidadreal,iva) VALUES (%s, %s, %s, now(), %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s, %s, monto,cantidad,%s)",$row_rsCoti2['idcotizacion'],
+  $insertSQL = sprintf("INSERT INTO subcotizacion (idcotizacion, identificador,identificador2, fecha, formapago, moneda, vigencia, tipoentrega, garantia,estado, nombre,contacto,tipo_cambio,notas,usercreo,utilidad_global,tipo,descrimano,monto,descuento, cantidad, unidad, codigo, marca,montoreal,cantidadreal,iva) VALUES (%s, %s, %s, now(), %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s, %s, %s,cantidad,%s)",$row_rsCoti2['idcotizacion'],
                        GetSQLValueString($row_rsCoti2['identificador'],"int"),
 					   GetSQLValueString($_POST['identificador'],"text"),
                        GetSQLValueString($row_rsCoti2['formapago'],"text"),
@@ -121,6 +121,7 @@ $totalRows_rsCoti2 = mysql_num_rows($rsCoti2);
 					   GetSQLValueString($row_rsCoti2['unidad'],"text"),
 					   GetSQLValueString($row_rsCoti2['codigo'],"text"),
 					   GetSQLValueString($row_rsCoti2['marca'],"text"),
+					   GetSQLValueString($row_rsCoti2['montoreal'],"double"),
 					   GetSQLValueString($row_rsCoti2['iva'],"double"));
 mysql_select_db($database_tecnocomm, $tecnocomm);
   $Result1 = mysql_query($insertSQL, $tecnocomm) or die(mysql_error());
@@ -128,7 +129,23 @@ mysql_select_db($database_tecnocomm, $tecnocomm);
 $idsub = mysql_insert_id();
  
  mysql_select_db($database_tecnocomm, $tecnocomm);
-$query_RsArticulos = sprintf("SELECT *,articulo.idarticulo as ida, precio_cotizacion as pc,suba.moneda AS monedasubcotizacion FROM subcotizacion sub,subcotizacionarticulo suba, articulo WHERE sub.idsubcotizacion=suba.idsubcotizacion and suba.idarticulo=articulo.idarticulo and suba.idsubcotizacion=%s ORDER BY suba.idsubcotizacionarticulo ASC", $_POST['idsubcotizacion']);
+$query_RsArticulos = sprintf("
+    SELECT 
+        *,
+        articulo.idarticulo as ida,
+        precio_cotizacion as pc,
+        suba.moneda AS monedasubcotizacion 
+    FROM 
+        subcotizacion sub,
+        subcotizacionarticulo suba, 
+        articulo 
+    WHERE 
+        sub.idsubcotizacion=suba.idsubcotizacion and 
+        suba.idarticulo=articulo.idarticulo and 
+        suba.idsubcotizacion=%s 
+    ORDER BY 
+        suba.idsubcotizacionarticulo ASC", 
+    $_POST['idsubcotizacion']);
 $RsArticulos = mysql_query($query_RsArticulos, $tecnocomm) or die(mysql_error());
 $row_RsArticulos = mysql_fetch_assoc($RsArticulos);
 $totalRows_RsArticulos = mysql_num_rows($RsArticulos);
@@ -145,7 +162,7 @@ do{
 					   GetSQLValueString($row_RsArticulos['monedasubcotizacion'],"int"),
 					   GetSQLValueString($row_RsArticulos['marca1'],"text"),
 					   GetSQLValueString($row_RsArticulos['tipo_cambio'],"double"),
-					   GetSQLValueString($row_RsArticulos['cantidad'],"double"));
+					   GetSQLValueString($row_RsArticulos['reall'],"double"));
 
   mysql_select_db($database_tecnocomm, $tecnocomm);
   $Result1 = mysql_query($insertSQL, $tecnocomm) or die(mysql_error()." error en insertar articulos");

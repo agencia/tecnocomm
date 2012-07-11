@@ -110,7 +110,11 @@ $estadofactura =array ("<img src=\"images/Facturacion.png\"  title=\"Activa\"/>"
 </tr>
 </thead>
 <tbody>
-<?php do { ?>
+<?php 
+$total = 0;
+$saldo = 0;
+
+do { ?>
   <tr>
     <td valign="top"><a href="verPago.php?idfactura=<?php echo $row_rsFacturas['idfactura']; ?>" class="popup"><?php echo $estadofactura[$row_rsFacturas['estado']];?></a></td>
     <td align="center" valign="top"><?php echo $row_rsFacturas['numfactura']; ?></td>
@@ -118,8 +122,12 @@ $estadofactura =array ("<img src=\"images/Facturacion.png\"  title=\"Activa\"/>"
     <td align="center" valign="top"><a href="index.php?mod=detalleip&idip=<?php echo $row_rsFacturas['idip']; ?>"><?php echo $row_rsFacturas['idip']; ?></a></td>
     <td valign="top"><?php echo $row_rsFacturas['nombre']; ?></td><td valign="top">:</td><td align="right" valign="top"><?php echo format_money($row_rsFacturas['subtotal']); ?></td>
     <td align="right" valign="top"><?php echo format_money($row_rsFacturas['subtotal'] * $row_rsFacturas['iva']/100); ?></td>
-    <td align="right" valign="top"><?php echo format_money($row_rsFacturas['subtotal'] * (1 + $row_rsFacturas['iva']/100)); ?></td>
-    <td align="right" valign="top"><?php echo format_money(($row_rsFacturas['subtotal'] * (1 + $row_rsFacturas['iva']/100)) - $row_rsFacturas['abonado']); ?></td>
+    <td align="right" valign="top"><?php echo format_money($row_rsFacturas['subtotal'] * (1 + $row_rsFacturas['iva']/100));
+    $total += $row_rsFacturas['subtotal'] * (1 + $row_rsFacturas['iva']/100);
+    ?></td>
+    <td align="right" valign="top"><?php echo format_money(($row_rsFacturas['subtotal'] * (1 + $row_rsFacturas['iva']/100)) - $row_rsFacturas['abonado']);
+    $saldo += ($row_rsFacturas['subtotal'] * (1 + $row_rsFacturas['iva']/100)) - $row_rsFacturas['abonado'];
+    ?></td>
     <td align="right" valign="top">
     <a href="printFacturaPDF.php?idfactura=<?php echo $row_rsFacturas['idfactura']; ?>" class="popup"><img src="images/Imprimir2.png" width="24" height="24" border="0"  title="Imprimir Factura"/></a>
             <a href="eliminarFactura.php?idfactura=<?php echo $row_rsFacturas['idfactura']; ?>" class="popup"><img src="images/eliminar.gif" alt="eliminar" width="19" height="19" border="0" title="ELIMINAR FACTURA" /></a>
@@ -127,6 +135,11 @@ $estadofactura =array ("<img src=\"images/Facturacion.png\"  title=\"Activa\"/>"
             </td>
   </tr>
   <?php } while ($row_rsFacturas = mysql_fetch_assoc($rsFacturas)); ?>
+  <tr><td colspan="8">&nbsp; </td>
+  <td align="right">Total: <?php echo format_money($total); ?></td>
+  <td align="right">Saldo: <?php echo format_money($saldo); ?></td>
+  <td align="right">&nbsp;</td>
+</tr>
   </tbody>
   <tfoot>
 <tr><td colspan="11" align="right"><table border="0">
