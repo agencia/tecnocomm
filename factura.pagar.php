@@ -105,7 +105,7 @@ $totalRows_rsFactura = mysql_num_rows($rsFactura);
 <script language="javascript" >
 $(function(){
 	
-	$('.fecha').datepicker();
+	$('.fecha').datepicker({ dateFormat: "yy-mm-dd" } );
 		   
 });
 </script>

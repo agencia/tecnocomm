@@ -32,7 +32,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 $query = "SELECT *,o.identificador AS identorden,o.idcotizacion AS idencoti FROM ordencompra o LEFT JOIN subcotizacion s ON o.idcotizacion = s.idsubcotizacion ORDER BY EXTRACT(YEAR FROM o.fecha) desc, o.consecutivo DESC ";
 
 if(isset($_GET['buscar']) && $_GET['buscar']!=""){
-	$query = sprintf("SELECT *,o.identificador AS identorden,o.idcotizacion AS idencoti FROM ordencompra o LEFT JOIN subcotizacion s ON o.idcotizacion = s.idsubcotizacion JOIN proveedor p ON o.idproveedor = p.idproveedor WHERE s.identificador2 like %s OR p.nombrecomercial like %s OR p.abreviacion like %s ORDER BY EXTRACT(YEAR FROM o.fecha) desc, o.consecutivo DESC",GetSQLValueString("%".$_GET['buscar']."%","text"),GetSQLValueString("%".$_GET['buscar']."%","text"),GetSQLValueString("%".$_GET['buscar']."%","text"));
+	$query = sprintf("SELECT *,o.identificador AS identorden,o.idcotizacion AS idencoti FROM ordencompra o LEFT JOIN subcotizacion s ON o.idcotizacion = s.idsubcotizacion JOIN proveedor p ON o.idproveedor = p.idproveedor WHERE s.identificador2 like %s OR p.nombrecomercial like %s OR o.tituloconcepto like %s OR p.abreviacion like %s ORDER BY EXTRACT(YEAR FROM o.fecha) desc, o.consecutivo DESC",GetSQLValueString("%".$_GET['buscar']."%","text"),GetSQLValueString("%".$_GET['buscar']."%","text"),GetSQLValueString("%".$_GET['buscar']."%","text"),GetSQLValueString("%".$_GET['buscar']."%","text"));
 }
 
 $currentPage = $_SERVER["PHP_SELF"];
@@ -73,6 +73,17 @@ if (!empty($_SERVER['QUERY_STRING'])) {
   }
 }
 $queryString_ordenCompra = sprintf("&totalRows_ordenCompra=%d%s", $totalRows_ordenCompra, $queryString_ordenCompra);
+
+
+$colname_rsCotx = "-1";
+if (isset($_GET['idpartida'])) {
+  $colname_rsCotx = $_GET['idpartida'];
+}
+mysql_select_db($database_tecnocomm, $tecnocomm);
+$query_rsCotx = "SELECT * FROM subcotizacion WHERE idsubcotizacion IN (SELECT idcotizacion FROM ordencompra WHERE idcotizacion is not null) ORDER BY identificador2";
+$rsCotx = mysql_query($query_rsCotx, $tecnocomm) or die(mysql_error());
+$row_rsCotx = mysql_fetch_assoc($rsCotx);
+$totalRows_rsCotx = mysql_num_rows($rsCotx);
 ?>
 
   <table width="940" border="0" cellpadding="0" cellspacing="0">
@@ -82,7 +93,7 @@ $queryString_ordenCompra = sprintf("&totalRows_ordenCompra=%d%s", $totalRows_ord
     </tr>
     <tr>
       <td width="8" height="16"></td>
-      <td width="163"></td>
+      <td width="100"></td>
       <td width="120"></td>
       <td width="135"></td>
       <td width="209"></td>
@@ -106,10 +117,23 @@ $queryString_ordenCompra = sprintf("&totalRows_ordenCompra=%d%s", $totalRows_ord
     </tr>
     <tr>
       <td height="45"></td>
-      <td colspan="3"><form method="get" name="buscarorden">Buscar:
+      <td colspan="2">
+          <form method="get" name="buscarorden">Buscar:
       <input name="buscar" type="text" id="buscar" value="<?php echo $_GET['buscar'];?>" />
       <input type="submit" name="button" id="button" value="buscar" />
-      <input type="hidden" name="mod" value="ordenCompra" /></form></td>
+      <input type="hidden" name="mod" value="ordenCompra" /></form>
+      </td>
+      <td>
+          <form method="get" name="buscarorden2">Buscar:
+                  <select name="buscar">
+                      <option value="">Seleccione una cotizacion</option>
+                      <?php do { ?>
+                      <option><?php echo $row_rsCotx['identificador2']; ?></option>
+                      <?php } while($row_rsCotx = mysql_fetch_assoc($rsCotx)); ?>
+                  </select>
+      <input type="submit" name="button" id="button" value="Buscar Cotizacion" />
+      <input type="hidden" name="mod" value="ordenCompra" /></form>
+      </td>
       <td colspan="2" align="right" valign="top"><a href="<?php printf("%s?pageNum_ordenCompra=%d%s", $currentPage, 0, $queryString_ordenCompra); ?>">
         <?php if ($pageNum_ordenCompra > 0) { // Show if not first page ?>
           <img src="images/First.gif" width="24" height="24" />
@@ -150,8 +174,8 @@ $queryString_ordenCompra = sprintf("&totalRows_ordenCompra=%d%s", $totalRows_ord
     
     <tr class="titleTabla">
       <td height="18"></td>
-      <td valign="top">Opciones</td>
-      <td valign="top">Orden de Compra</td>
+      <td  width="30px" valign="top">Opciones</td>
+      <td width="200px" valign="top">Orden de Compra</td>
       <td colspan="2" valign="top">Concepto</td>
       <td colspan="2" valign="top"><!--DWLayoutEmptyCell-->&nbsp;</td>
       <td>&nbsp;</td>

@@ -35,7 +35,10 @@ if (isset($_GET['idordencompra'])) {
   $colname_rsDetalleCotizacion = $_GET['idordencompra'];
 }
 mysql_select_db($database_tecnocomm, $tecnocomm);
-$query_rsDetalleCotizacion = sprintf("SELECT *,(SELECT SUM(dor.cantidad) FROM detalleorden dor WHERE idpartida = sb.idsubcotizacionarticulo) AS pedido FROM subcotizacionarticulo sb,articulo a,ordencompra o WHERE o.idordencompra = %s AND sb.idarticulo = a.idarticulo AND o.idcotizacion = sb.idsubcotizacion ORDER BY idsubcotizacionarticulo ASC ", GetSQLValueString($colname_rsDetalleCotizacion, "int"));
+$query_rsDetalleCotizacion = sprintf("SELECT *,
+    (SELECT SUM(dor.cantidad) FROM detalleorden dor WHERE idpartida = sb.idsubcotizacionarticulo) AS pedido,
+    a.idarticulo
+    FROM subcotizacionarticulo sb,articulo a,ordencompra o WHERE o.idordencompra = %s AND sb.idarticulo = a.idarticulo AND o.idcotizacion = sb.idsubcotizacion ORDER BY idsubcotizacionarticulo ASC ", GetSQLValueString($colname_rsDetalleCotizacion, "int"));
 $rsDetalleCotizacion = mysql_query($query_rsDetalleCotizacion, $tecnocomm) or die(mysql_error());
 $row_rsDetalleCotizacion = mysql_fetch_assoc($rsDetalleCotizacion);
 $totalRows_rsDetalleCotizacion = mysql_num_rows($rsDetalleCotizacion);
@@ -52,15 +55,65 @@ $totalRows_rsOrdenCompra = mysql_num_rows($rsOrdenCompra);
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Documento sin t&iacute;tulo</title>
 <link href="style.css" rel="stylesheet" type="text/css" />
-<script src="js/funciones.js"></script>
+<script language="javascript" src="js/funciones.js"></script>
+
+<style type="text/css">
+<!--
+.Estilo1 {
+	color: #FFFFFF;
+	font-size: 17px;
+}
+-->
+</style>
 </head>
 
-<body>
+<body >
+    <table width="1036" border="0" align="center" class="wrapper">
+  <tr class="titulos">
+    <td colspan="7" align="center" class="Estilo1" >AGREGAR ARTICULOS A ORDEN DE COMPRA</td>
+    </tr>
+  <tr>
+    <td width="100">&nbsp;</td>
+    <td colspan="2">&nbsp;</td>
+    <td colspan="4">&nbsp;</td>
+    </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td colspan="6" align="center"><label></label></td>
+    </tr>
+        <tr class="titleTabla">
+            <td width="58" height="20" valign="top">&nbsp;</td>
+                <td width="78" valign="top">CODIGO</td>
+                <td width="72" valign="top">MARCA</td>
+                <td width="264" valign="top">DESCRIPCION</td>
+                <td width="42" valign="top">CANT.</td>
+                <td width="74" valign="top">P. UNITARIO</td>
+                <td width="74" valign="top">OPCIONES</td>
+              </tr>
+  <tr>
+    <td colspan="7">&nbsp;</td>
+    </tr>
+          <?php do { ?>
+            <tr onmouseover="
+	this.style.backgroundColor = '#E2EBF4';" onmouseout="this.style.backgroundColor = '';">
+                <td width="59" height="24" valign="top"><!--DWLayoutEmptyCell-->&nbsp;</td>
+              <td width="74" valign="top"><div align="center"><?php echo $row_rsDetalleCotizacion['codigo']; ?></div></td>
+              <td width="75" valign="top"><div align="center"><?php echo $row_rsDetalleCotizacion['marca']; ?></div></td>
+              <td width="240" valign="top"><?php echo $row_rsDetalleCotizacion['nombre']; ?></td>
+              <td width="41" valign="top"><div align="center"><?php $pedido = ($row_rsDetalleCotizacion['pedido'])?$row_rsDetalleCotizacion['pedido']:0; echo$pedido; ?>/<?php echo $row_rsDetalleCotizacion['cantidad']; ?></div></td>
+              <td width="73" valign="top"><div align="right"><?php echo $row_rsDetalleCotizacion['precio']; ?> </div></td>
+              <td width="73" valign="top"><div align="right"><a href="asignarDetalleOrdenCatalago.php?idordencompra=<?php echo $_GET['idordencompra']?>&idpartida=<?php echo $row_rsDetalleCotizacion['idsubcotizacionarticulo']; ?>" onclick="NewWindow(this.href,'Asignar',800,800,'yes');return false;"><img src="images/Checkmark.png" width="24" height="24" /></a></div></td>
+            </tr>
+            <?php } while ($row_rsDetalleCotizacion = mysql_fetch_assoc($rsDetalleCotizacion)); ?>
+
+</table>
+    
+<!--    
 <table width="740" border="0" cellpadding="0" cellspacing="0" class="wrapper" align="center">
-  <!--DWLayoutTable-->
+  DWLayoutTable
   <tr>
     <td height="20" colspan="5" valign="top">AGREGAR ARTICULO A ORDEN DE COMPRA</td>
   </tr>
@@ -72,21 +125,6 @@ $totalRows_rsOrdenCompra = mysql_num_rows($rsOrdenCompra);
     <td width="11"></td>
   </tr>
   <tr>
-    <td height="20" valign="top">PROVEEDOR:</td>
-    <td valign="top"><?php echo $row_rsOrdenCompra['nombrecomercial']; ?></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td height="23" valign="top">COTIZACION:</td>
-    <td valign="top"><?php echo $row_rsOrdenCompra['identificador2']; ?></td>
-    <td>&nbsp;</td>
-    <td valign="top">    <input type="button" name="Submit" value="cerrar" onclick="window.location='close.php'" />
-</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
     <td height="13"></td>
     <td></td>
     <td></td>
@@ -95,13 +133,13 @@ $totalRows_rsOrdenCompra = mysql_num_rows($rsOrdenCompra);
   </tr>
   <tr>
     <td height="88" colspan="5" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-      <!--DWLayoutTable-->
+      DWLayoutTable
       <tr>
         <td width="765" height="21" valign="top">PRODUCTOS DE ORDEN DE COMPRA:</td>
         </tr>
       <tr>
         <td height="20" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <!--DWLayoutTable-->
+          DWLayoutTable
           <tr>
             <td width="58" height="20" valign="top">PARTIDA</td>
                 <td width="78" valign="top">CODIGO</td>
@@ -117,10 +155,10 @@ $totalRows_rsOrdenCompra = mysql_num_rows($rsOrdenCompra);
         </tr>
       <tr>
         <td height="21" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <!--DWLayoutTable-->
+          DWLayoutTable
           <?php do { ?>
             <tr>
-                <td width="59" height="24" valign="top"><!--DWLayoutEmptyCell-->&nbsp;</td>
+                <td width="59" height="24" valign="top">DWLayoutEmptyCell&nbsp;</td>
               <td width="74" valign="top"><div align="center"><?php echo $row_rsDetalleCotizacion['codigo']; ?></div></td>
               <td width="75" valign="top"><div align="center"><?php echo $row_rsDetalleCotizacion['marca']; ?></div></td>
               <td width="240" valign="top"><?php echo $row_rsDetalleCotizacion['nombre']; ?></td>
@@ -146,7 +184,7 @@ $totalRows_rsOrdenCompra = mysql_num_rows($rsOrdenCompra);
     <td></td>
     <td></td>
   </tr>
-</table>
+</table>-->
 </body>
 </html>
 <?php

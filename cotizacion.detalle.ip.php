@@ -113,6 +113,14 @@ $rsPartidas = mysql_query($query_rsPartidas, $tecnocomm) or die(mysql_error());
 $row_rsPartidas = mysql_fetch_assoc($rsPartidas);
 $totalRows_rsPartidas = mysql_num_rows($rsPartidas);
 
+$query_rsPartidas2 = sprintf("SELECT 
+    suba.descri, 
+    suba.precio_cotizacion, 
+    suba.cantidad,
+    suba.utilidad,
+    suba.mo as mano_de_obra,
+    suba.moneda  AS monedacotizacion, articulo.moneda as monart, articulo.tipo as tip FROM subcotizacion sub,subcotizacionarticulo suba, articulo WHERE sub.idsubcotizacion=suba.idsubcotizacion and suba.idarticulo=articulo.idarticulo and suba.idsubcotizacion=%s %s ORDER BY idsubcotizacionarticulo ASC", GetSQLValueString($ide_rsPartidas, "int"),$bus);
+
 //asignamos el num de partida
 $k=1;
 do{
@@ -194,7 +202,9 @@ $(function(){
     <td  align="right" bgcolor="#CCCCCC">Tiempo Entrega:</td>
     <td ><?php echo $row_rsCotizacion['tipoentrega']?></td>
     <td align="right" bgcolor="#CCCCCC" >Opciones:</td>
-    <td ><a href="cotizaciones_nueva_modDatos.php?idsubcotizacion=<?php echo $_GET['idsubcotizacion'];?>" onclick="NewWindow(this.href,'Buscar articulo','500','500','yes');return false"><img src="images/Edit.png" width="24" height="24" border="0" align="middle" title="Editar Datos de Cotizacion" /></a><a href="exportarExcel.php?query=<?php echo $query_rsPartidas; ?>" onclick="NewWindow(this.href,'Ver Partida Extra',600,800,'yes'); return false;"><img src="images/Agregar.png" alt="" width="24" height="24" border="0" align="middle" title="Exportar Datos a Excel" /></a><a href="printCotizacion.php?idsubcotizacion=<?php echo $_GET['idsubcotizacion'];?>" onclick="NewWindow(this.href,'IMPRIMIR COTIZACION','1100','980','yes');return false;"><img src="images/Imprimir2.png" alt="Imprimir" width="24" height="24" border="0" align="middle"  title="Imprimir Cotizacion"/></a><?php if ($row_rsCotizacion['estado']<6){?><a href="cotizacionEnviada.php?idsubcotizacion=<?php echo $_GET['idsubcotizacion'];?>" onclick="NewWindow(this.href,'ENVIAR Cotizacion','450','200','yes');return false"><img src="images/state2.png" alt="Enviar" width="24" height="24" border="0" align="middle" title="Enviar Cotizacion" /></a><?php } else{?><a href="conciliacionEnviada.php?idsubcotizacion=<?php echo $_GET['idsubcotizacion'];?>" onclick="NewWindow(this.href,'ENVIAR Conciliacion','450','200','yes');return false"><img src="images/state2.png" alt="Enviar" width="24" height="24" border="0" align="middle" title="Enviar Conciliacion" /></a><?php } ?><a href="importar.levantamiento.php?idsubcotizacion=<?php echo $_GET['idsubcotizacion'];?>&idip=<?php echo $_GET['idip'];?>" onclick="NewWindow(this.href,'Buscar articulo','500','500','yes');return false"><img src="images/Facturacion.png" width="24" height="24" border="0" align="absmiddle" / title="Importar Datos de Levantamiento"></a></td>
+    <td >
+        <a href="cotizaciones_nueva_modDatos.php?idsubcotizacion=<?php echo $_GET['idsubcotizacion'];?>" onclick="NewWindow(this.href,'Buscar articulo','500','500','yes');return false"><img src="images/Edit.png" width="24" height="24" border="0" align="middle" title="Editar Datos de Cotizacion" /></a>
+        <a href="exportarExcel.php?query=<?php echo $query_rsPartidas2; ?>" onclick="NewWindow(this.href,'Ver Partida Extra',600,800,'yes'); return false;"><img src="images/Agregar.png" alt="" width="24" height="24" border="0" align="middle" title="Exportar Datos a Excel" /></a><a href="printCotizacion.php?idsubcotizacion=<?php echo $_GET['idsubcotizacion'];?>" onclick="NewWindow(this.href,'IMPRIMIR COTIZACION','1100','980','yes');return false;"><img src="images/Imprimir2.png" alt="Imprimir" width="24" height="24" border="0" align="middle"  title="Imprimir Cotizacion"/></a><?php if ($row_rsCotizacion['estado']<6){?><a href="cotizacionEnviada.php?idsubcotizacion=<?php echo $_GET['idsubcotizacion'];?>" onclick="NewWindow(this.href,'ENVIAR Cotizacion','450','200','yes');return false"><img src="images/state2.png" alt="Enviar" width="24" height="24" border="0" align="middle" title="Enviar Cotizacion" /></a><?php } else{?><a href="conciliacionEnviada.php?idsubcotizacion=<?php echo $_GET['idsubcotizacion'];?>" onclick="NewWindow(this.href,'ENVIAR Conciliacion','450','200','yes');return false"><img src="images/state2.png" alt="Enviar" width="24" height="24" border="0" align="middle" title="Enviar Conciliacion" /></a><?php } ?><a href="importar.levantamiento.php?idsubcotizacion=<?php echo $_GET['idsubcotizacion'];?>&idip=<?php echo $_GET['idip'];?>" onclick="NewWindow(this.href,'Buscar articulo','500','500','yes');return false"><img src="images/Facturacion.png" width="24" height="24" border="0" align="absmiddle" / title="Importar Datos de Levantamiento"></a></td>
   </tr>
   <tr>
     <td  align="right" bgcolor="#CCCCCC">Descuento:</td>
@@ -361,6 +371,17 @@ $(function(){
     <td align="left">&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
+    <?php if ($row_rsCotizacion['estado']>5){?>
+  <tr>
+    <td colspan="5" align="right">&nbsp;</td>
+    <td align="left" bgcolor="#CCCCCC">&nbsp;</td>
+    <td align="left" bgcolor="#CCCCCC"><b>Cotizado</b></td>
+    <td align="right" colspan="2" bgcolor="#CCCCCC"><b>Conciliado</b></td>
+    <td align="left">&nbsp;</td>
+    <td align="left">&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+    <?php } ?>
   <tr>
     <td align="right">&nbsp;</td>
     <td align="right">&nbsp;</td>
@@ -369,8 +390,9 @@ $(function(){
     <td align="right">&nbsp;</td>
     <td align="center" bgcolor="#CCCCCC"><strong>SUBTOTAL:</strong></td>
     <td align="center"><?php echo $signo[$row_rsCotizacion['moneda']]; ?><?php echo format_money($sub);?></td>
-    <td align="center">&nbsp;</td>
-    <td align="center" >&nbsp;</td>
+    <td colspan="2" align="right"><?php if ($row_rsCotizacion['estado']>5){?>
+        <?php echo $signo[$row_rsCotizacion['moneda']]; ?><?php echo format_money($subinst);?>
+        <?php } ?></td>
     <td >&nbsp;</td>
     <td >&nbsp;</td>
     </tr>
@@ -383,7 +405,11 @@ $(function(){
     <td align="center" bgcolor="#CCCCCC"><strong>DESCUENTO:</strong></td>
     <td align="center"><?php echo $signo[$row_rsCotizacion['moneda']]; ?>-
       <?php  $descuento = ($row_rsCotizacion['descuento']/100)*$sub; echo format_money($descuento);$sub = $sub - $descuento;?></td>
-    <td align="center">&nbsp;</td>
+    <td colspan="2" align="right"><?php if ($row_rsCotizacion['estado']>5)
+        {?>
+            <?php echo $signo[$row_rsCotizacion['moneda']]; ?>-
+      <?php  $descuentoreal = ($row_rsCotizacion['descuentoreal']/100)*$subinst; echo format_money($descuentoreal);$subinst = $subinst - $descuentoreal;?>
+            <?php } ?></td>
     <td align="center">&nbsp;</td>
     <td align="left">&nbsp;</td>
     <td>&nbsp;</td>
@@ -396,8 +422,13 @@ $(function(){
     <td align="right">&nbsp;</td>
     <td align="center" bgcolor="#CCCCCC"><strong>SUBTOTAL</strong></td>
     <td align="center"><?php echo $signo[$row_rsCotizacion['moneda']]; ?><?php echo format_money($sub);?></td>
+    <td colspan="2" align="right"><?php if ($row_rsCotizacion['estado']>5){?>
+<?php echo $signo[$row_rsCotizacion['moneda']]; ?><?php echo format_money($subinst);?>
+<?php } ?></td>
     <td align="center">&nbsp;</td>
-    <td align="center">&nbsp;</td><td align="left">&nbsp;</td><td>&nbsp;</td></tr>
+    <td align="left">&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
   <tr>
     <td align="right">&nbsp;</td>
     <td align="right">&nbsp;</td>
@@ -406,27 +437,36 @@ $(function(){
     <td align="right">&nbsp;</td>
     <td align="center" bgcolor="#CCCCCC"><strong>I.V.A:</strong></td>
     <td align="center"><?php echo $signo[$row_rsCotizacion['moneda']]; ?>      <?php  $iva = ($sub*$row_rsCotizacion['iva'])/100;echo format_money($iva);?></td>
+    <td colspan="2" align="right"><?php if ($row_rsCotizacion['estado']>5){?>
+<?php echo $signo[$row_rsCotizacion['moneda']]; ?>      <?php  $ivareal = ($subinst*$row_rsCotizacion['iva'])/100;echo format_money($ivareal);?>
+<?php } ?></td>
     <td align="center">&nbsp;</td>
-    <td align="center">&nbsp;</td><td align="left">&nbsp;</td><td>&nbsp;</td></tr><tr><td align="right">&nbsp;</td>
+    <td align="left">&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+      <td align="right">&nbsp;</td>
       <td align="right">&nbsp;</td>
       <td align="right">&nbsp;</td>
       <td align="right">&nbsp;</td>
       <td align="right">&nbsp;</td>
       <td align="center" bgcolor="#CCCCCC"><strong>TOTAL:</strong></td>
       <td align="center"><?php echo $signo[$row_rsCotizacion['moneda']]; ?><?php echo format_money($sub + $iva);?></td>
-      <td align="center">&nbsp;</td>
+      <td colspan="2" align="right"><?php if ($row_rsCotizacion['estado']>5){?>
+<?php echo $signo[$row_rsCotizacion['moneda']]; ?><?php echo format_money($subinst + $ivareal);?>
+<?php } ?></td>
       <td align="center">&nbsp;</td><td align="left">&nbsp;</td><td>&nbsp;</td></tr>
     <?php if ($row_rsCotizacion['estado']>5){?>
-    <tr>
+<!--    <tr>
     <td align="right">&nbsp;</td>
     <td align="right">&nbsp;</td>
     <td align="right">&nbsp;</td>
     <td align="right">&nbsp;</td>
     <td align="right">&nbsp;</td>
+    <td align="center">&nbsp;</td>
+    <td align="center">&nbsp;</td>
     <td align="center" bgcolor="#CCCCCC"><strong>SUBTOTAL REAL:</strong></td>
     <td align="center"><?php echo $signo[$row_rsCotizacion['moneda']]; ?><?php echo format_money($subinst);?></td>
-    <td align="center">&nbsp;</td>
-    <td align="center">&nbsp;</td>
     <td align="left">&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
@@ -436,20 +476,24 @@ $(function(){
       <td align="right">&nbsp;</td>
       <td align="right">&nbsp;</td>
       <td align="right">&nbsp;</td>
+      <td align="center">&nbsp;</td>
+      <td align="left">&nbsp;</td>
       <td align="center" bgcolor="#CCCCCC"><strong>DESCUENTO REAL:</strong></td>
       <td align="center"><?php echo $signo[$row_rsCotizacion['moneda']]; ?>-
       <?php  $descuentoreal = ($row_rsCotizacion['descuentoreal']/100)*$subinst; echo format_money($descuentoreal);$subinst = $subinst - $descuentoreal;?></td>
       <td align="center">&nbsp;</td>
-      <td align="center">&nbsp;</td><td align="left">&nbsp;</td><td>&nbsp;</td></tr><tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
       <td align="right">&nbsp;</td>
       <td align="right">&nbsp;</td>
       <td align="right">&nbsp;</td>
       <td align="right">&nbsp;</td>
       <td align="right">&nbsp;</td>
+      <td align="center">&nbsp;</td>
+      <td align="center">&nbsp;</td>
       <td align="center" bgcolor="#CCCCCC"><strong>SUBTOTAL REAL:</strong></td>
       <td align="center"><?php echo $signo[$row_rsCotizacion['moneda']]; ?><?php echo format_money($subinst);?></td>
-      <td align="center">&nbsp;</td>
-      <td align="center">&nbsp;</td>
       <td align="left">&nbsp;</td>
       <td>&nbsp;</td>
     </tr>
@@ -459,11 +503,11 @@ $(function(){
     <td align="right">&nbsp;</td>
     <td align="right">&nbsp;</td>
     <td align="right">&nbsp;</td>
+    <td align="center">&nbsp;</td>
+    <td align="left">&nbsp;</td>
     <td align="center" bgcolor="#CCCCCC"><strong>I.V.A. REAL:</strong></td>
     <td align="center"><?php echo $signo[$row_rsCotizacion['moneda']]; ?>      <?php  $ivareal = ($subinst*$row_rsCotizacion['iva'])/100;echo format_money($ivareal);?></td>
     <td align="center">&nbsp;</td>
-    <td align="center">&nbsp;</td>
-    <td align="left">&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
   <tr>
@@ -472,15 +516,15 @@ $(function(){
     <td align="right">&nbsp;</td>
     <td align="right">&nbsp;</td>
     <td align="right">&nbsp;</td>
+    <td align="center">&nbsp;</td>
+    <td align="center">&nbsp;</td>
     <td align="center" bgcolor="#CCCCCC"><strong>TOTAL REAL:</strong></td>
     <td align="center"><?php echo $signo[$row_rsCotizacion['moneda']]; ?><?php echo format_money($subinst + $ivareal);?></td>
-    <td align="center">&nbsp;</td>
-    <td align="center">&nbsp;</td>
     <td align="left">&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
   
- 
+ -->
     <?php } //if no 0?>
    
 </table>

@@ -36,12 +36,13 @@ if (isset($_SERVER['QUERY_STRING'])) {
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "asignar")) {
     $desc = (isset($_POST['descuento'])) ? $_POST['descuento'] : 0;
-  $insertSQL = sprintf("INSERT INTO detalleorden (cantidad, costo, idordencompra,idarticulo, descri, descuento) VALUES (%s, %s, %s,%s,%s,%s)",
+  $insertSQL = sprintf("INSERT INTO detalleorden (cantidad, costo, idordencompra,idarticulo, descri, idpartida, descuento) VALUES (%s, %s, %s,%s,%s,%s,%s)",
                        GetSQLValueString($_POST['cantidad'], "double"),
 					   GetSQLValueString($_POST['precio'], "double"),
                        GetSQLValueString($_POST['idordencompra'], "int"),
 					   GetSQLValueString($_POST['idarticulo'], "int"),
 					   GetSQLValueString($_POST['descri'], "text"),
+                       GetSQLValueString($_POST['idpartida'], "int"),
 					   GetSQLValueString($desc, "double")
 					   );
 
@@ -59,12 +60,23 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "asignar")) {
 $colname_rsPartidas = "-1";
 if (isset($_GET['idarticulo'])) {
   $colname_rsPartidas = $_GET['idarticulo'];
-}
 mysql_select_db($database_tecnocomm, $tecnocomm);
-$query_rsPartidas = sprintf("SELECT * FROM articulo WHERE idarticulo = %s", GetSQLValueString($colname_rsPartidas, "int"));
+$query_rsPartidas = sprintf("SELECT * FROM subcotizacionarticulo sb,articulo a WHERE a.idarticulo = %s AND sb.idarticulo = a.idarticulo", GetSQLValueString($colname_rsPartidas, "int"));
 $rsPartidas = mysql_query($query_rsPartidas, $tecnocomm) or die(mysql_error());
 $row_rsPartidas = mysql_fetch_assoc($rsPartidas);
 $totalRows_rsPartidas = mysql_num_rows($rsPartidas);
+$idarticulo = $_GET['idarticulo'];
+$partida = 0;
+} else{
+      $colname_rsPartidas = $_GET['idpartida'];
+mysql_select_db($database_tecnocomm, $tecnocomm);
+$query_rsPartidas = sprintf("SELECT * FROM subcotizacionarticulo sb,articulo a WHERE sb.idsubcotizacionarticulo = %s AND sb.idarticulo = a.idarticulo", GetSQLValueString($colname_rsPartidas, "int"));
+$rsPartidas = mysql_query($query_rsPartidas, $tecnocomm) or die(mysql_error());
+$row_rsPartidas = mysql_fetch_assoc($rsPartidas);
+$totalRows_rsPartidas = mysql_num_rows($rsPartidas);
+$idarticulo = $row_rsPartidas['idarticulo'];
+$partida = $_GET['idpartida'];
+}
 $cantidad = (isset($row_rsPartidas['cantidad'])) ? $row_rsPartidas['cantidad'] : 1;
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -85,12 +97,16 @@ $cantidad = (isset($row_rsPartidas['cantidad'])) ? $row_rsPartidas['cantidad'] :
                                 $("#final_unitario").html($("#precio").val()-($("#precio").val()*($("#descuento").val()/100)));
                                 $("#final_total").html(($("#precio").val()-($("#precio").val()*($("#descuento").val()/100)))*$("#cantidad").val());
                             });
+                            $("#cantidad").keyup(function(){
+                                $("#final_unitario").html($("#precio").val()-($("#precio").val()*($("#descuento").val()/100)));
+                                $("#final_total").html(($("#precio").val()-($("#precio").val()*($("#descuento").val()/100)))*$("#cantidad").val());
+                            });
 			});
 			
 </script>
 </head>
 
-<body>
+    <body onload="asignar.cantidad.focus();">
 <form action="<?php echo $editFormAction; ?>" name="asignar" method="POST">
 <table width="491" border="0" cellpadding="0" cellspacing="0" class="wrapper" align="center">
   <!--DWLayoutTable-->
@@ -174,7 +190,8 @@ $cantidad = (isset($row_rsPartidas['cantidad'])) ? $row_rsPartidas['cantidad'] :
   </tr>
 </table>
 <input type="hidden" name="idordencompra" value="<?php echo $_GET['idordencompra']; ?>" />
-<input type="hidden" name="idarticulo" value="<?php echo $_GET['idarticulo']; ?>"/>
+<input type="hidden" name="idarticulo" value="<?php echo $row_rsPartidas['idarticulo']; ?>"/>
+<input type="hidden" name="idpartida" value="<?php echo $_GET['idpartida'];?>"/>
 <input type="hidden" name="MM_insert" value="asignar" />
 </form>
 </body>

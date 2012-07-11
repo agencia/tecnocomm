@@ -66,6 +66,17 @@ $query_rsCotiIp5 = sprintf("SELECT o.* from ordencompra o, subcotizacion s, coti
 $rsCotiIp5 = mysql_query($query_rsCotiIp5, $tecnocomm) or die(mysql_error());
 $totalRows_rsCotiIp5 = mysql_num_rows($rsCotiIp5);
 
+mysql_select_db($database_tecnocomm, $tecnocomm);
+$query_rsCotiIp6 = sprintf("SELECT * from conversacion WHERE idip=%s", $ide_rsCotiIp2);
+$rsCotiIp6 = mysql_query($query_rsCotiIp6, $tecnocomm) or die(mysql_error());
+$totalRows_rsCotiIp6 = mysql_num_rows($rsCotiIp6);
+
+
+mysql_select_db($database_tecnocomm, $tecnocomm);
+$query_rsCotiIp7 = sprintf("SELECT * from levantamientoip WHERE idip=%s", $ide_rsCotiIp2);
+$rsCotiIp7 = mysql_query($query_rsCotiIp7, $tecnocomm) or die(mysql_error());
+$totalRows_rsCotiIp7 = mysql_num_rows($rsCotiIp7);
+
 
 ?>
 <script type="text/javascript">
@@ -92,7 +103,7 @@ $(function(){
 <h2>Movimientos de Ip</h2>
 <div id="tabs">
 	<ul>
-    	<li><a href="#caler">Alertas</a></li>
+    	<li><a href="#caler">Alertas (<?php echo $totalRows_rsCotiIp6; ?>)</a></li>
          <li><a href="#tabs-7">Avance</a></li>
          <li><a href="#tabs-b">Bitacora</a></li>
          <li><a href="#tabs-9">Conciliacion</a></li>
@@ -100,7 +111,7 @@ $(function(){
          <li><a href="#tabs-10">Facturas (<?php echo $totalRows_rsCotiIp4; ?>) </a></li>
          <li><a href="#tabs-11">Herramienta</a></li>
          <li><a href="#historialasignaciones">Historial Asignaciones</a></li>
-	<li><a href="#tabs-2">Levantamiento</a></li>
+	<li><a href="#tabs-2">Levantamiento (<?php echo $totalRows_rsCotiIp7; ?>)</a></li>
          <li><a href="#tabs-4">Materiales</a></li>
          <li><a href="#tabs-12">Ord. Compra (<?php echo $totalRows_rsCotiIp5; ?>)</a></li>
         <li><a href="#tabs-1">Ord. Servicio (<?php echo $totalRows_rsCotiIp3; ?>)</a></li>
